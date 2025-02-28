@@ -1,0 +1,62 @@
+a) Create a list of authors who have published less than 25 books.
+
+# Create an empty list
+authors_below_twenty_five = []
+
+# Loop through the authors dictionary
+for key, value in authors.items():
+  
+  # Check for values less than 25
+  if value < 25:
+    
+    # Append the author to the list
+    authors_below_twenty_five.append(key)
+    
+print(authors_below_twenty_five)
+// Output:    ['Nicholas Sparks', 'Judith Krantz', 'Harold Robbins', 'J. K. Rowling', 'Sidney Sheldon']
+
+b) Identify the genre with the highest and lowest average sales revenue.
+
+for genre, average_sale in genre_sales.items():
+    
+    # Filter for the maximum sales value
+    if average_sale == 5166000000:
+      
+        # Print the most popular genre
+        print("Most popular genre: ", genre)
+        print("Average sales: ", average_sale)
+    
+    # Filter for the minimum sales value
+    elif average_sale == 80000000:
+      
+        # Print the least popular genre
+        print("Least popular genre: ", genre)
+        print("Average sales: ", average_sale)
+// Output:     Least popular genre:  Literature
+    Average sales:  80000000
+    Most popular genre:  Manga
+    Average sales:  5166000000
+
+c) Loop through genre_sales dictionary and print the sales of books in the Horror or Mystery genres.
+
+# Loop through the dictionary
+for genre, sale in genre_sales.items():
+  
+  # Check if genre is Horror or Mystery
+  if genre == "Horror" or genre == "Mystery":
+    print(genre, sale)
+
+# Loop through the dictionary
+for genre, sale in genre_sales.items():
+  
+  # Check if genre is Horror or Mystery
+  if genre == "Horror" or genre == "Mystery":
+    print(genre, sale)
+    
+  # Check if genre is Thriller and sale is at least 3 million
+  elif genre == "Thriller" and sale >= 3000000:
+    print(genre, sale)
+    // Output:
+    Horror 312500000
+    Mystery 300000000
+    Thriller 320000000
