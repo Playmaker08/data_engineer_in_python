@@ -541,3 +541,10 @@ RENAME organization TO organization_id;
 -- Add a foreign key on organization_id (Defines organization_id as a foreign key in the affiliations table refers to the id column in the organizations table)
 ALTER TABLE affiliations
 ADD CONSTRAINT affiliations_organization_fkey FOREIGN KEY (organization_id) REFERENCES organizations (id);
+
+// Populate the "professor_id" column
+-- Update professor_id to professors.id where firstname, lastname correspond to rows in professors
+UPDATE affiliations
+SET professor_id = professors.id
+FROM professors
+WHERE affiliations.firstname = professors.firstname AND affiliations.lastname = professors.lastname;
