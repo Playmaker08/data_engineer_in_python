@@ -317,3 +317,227 @@ WHERE name IN
 -- Sort and limit the result
 ORDER BY city_perc DESC
 LIMIT 10;
+
+*** RELATIONAL DATABASES ***
+
+// Query information_schema with SELECT
+-- Query the right table in information_schema to get columns
+SELECT column_name, data_type 
+FROM information_schema.columns 
+WHERE table_name = 'university_professors' AND table_schema = 'public';
+
+// CREATE your first few TABLEs
+-- Create a table for the professors entity type
+CREATE TABLE professors (
+ firstname text,
+ lastname text
+);
+
+-- Print the contents of this table
+SELECT * 
+FROM professors
+
+-- Create a table for the universities entity type
+CREATE TABLE universities (
+ university_shortname text,
+ university text,
+ university_city text
+);
+
+-- Print the contents of this table
+SELECT * 
+FROM universities
+
+// ADD a COLUMN with ALTER TABLE
+-- Add the university_shortname column
+ALTER TABLE professors
+ADD COLUMN university_shortname text;
+
+-- Print the contents of this table
+SELECT * 
+FROM professors
+
+// RENAME and DROP COLUMNs in affiliations
+-- Rename the organisation column
+ALTER TABLE affiliations
+RENAME COLUMN organisation TO organization;
+
+-- Delete the university_shortname column
+ALTER TABLE affiliations
+DROP COLUMN university_shortname;
+
+// Migrate data with INSERT INTO SELECT DISTINCT
+-- Insert unique professors into the new table
+INSERT INTO professors 
+SELECT DISTINCT firstname, lastname, university_shortname 
+FROM university_professors;
+
+-- Doublecheck the contents of professors
+SELECT * 
+FROM professors;
+
+-- Insert unique affiliations into the new table
+INSERT INTO affiliations 
+SELECT DISTINCT firstname, lastname, function, organization 
+FROM university_professors;
+
+-- Doublecheck the contents of affiliations
+SELECT * 
+FROM affiliations;
+
+// Delete tables with DROP TABLE
+-- Delete the university_professors table
+DROP TABLE university_professors;
+
+// Type CASTs
+-- Calculate the net amount as amount + fee
+SELECT transaction_date, amount + CAST(fee AS integer) AS net_amount 
+FROM transactions;
+
+// Change types with ALTER COLUMN
+-- Select the university_shortname column
+SELECT DISTINCT(university_shortname) 
+FROM professors;
+
+-- Specify the correct fixed-length character type
+ALTER TABLE professors
+ALTER COLUMN university_shortname
+TYPE char(3);
+
+-- Change the type of firstname
+ALTER TABLE professors
+ALTER COLUMN firstname
+TYPE varchar(64);
+
+// Convert types USING a function
+-- Convert the values in firstname to a max. of 16 characters
+ALTER TABLE professors 
+ALTER COLUMN firstname 
+TYPE varchar(16) 
+USING SUBSTRING(firstname FROM 1 FOR 16);
+
+// Disallow NULL values with SET NOT NULL
+-- Disallow NULL values in firstname
+ALTER TABLE professors 
+ALTER COLUMN firstname SET NOT NULL;
+
+-- Disallow NULL values in lastname
+ALTER TABLE professors 
+ALTER COLUMN lastname SET NOT NULL;
+
+// Make your columns UNIQUE with ADD CONSTRAINT
+-- Make universities.university_shortname unique
+ALTER TABLE universities
+ADD CONSTRAINT university_shortname_unq UNIQUE(university_shortname);
+
+-- Make organizations.organization unique
+ALTER TABLE organizations
+ADD CONSTRAINT organization_unq UNIQUE(organization);
+
+Superkeys (if attributes of any key combination can be removed and the attributes still uniquely identify records) are minimal 
+if no attributes can be removed without losing uniqueness property
+PRIMARY keys (MUST be UNIQUE) consist of as few columns as possible and NEVER change over time
+Foreign keys are designated columns that point to a primary key of another table
+
+// Identify keys with SELECT COUNT DISTINCT
+-- Count the number of distinct values in the university_city column
+SELECT COUNT(DISTINCT(university_city)) 
+FROM universities;
+
+-- Try out different combinations
+SELECT COUNT(DISTINCT(firstname, lastname)) 
+FROM professors;
+
+// ADD key CONSTRAINTs to the tables
+-- Rename the organization column to id
+ALTER TABLE organizations
+RENAME COLUMN organization TO id;
+
+-- Make id a primary key
+ALTER TABLE organizations
+ADD CONSTRAINT organization_pk PRIMARY KEY (id);
+
+-- Rename the university_shortname column to id
+ALTER TABLE universities
+RENAME COLUMN university_shortname TO id;
+
+-- Make id a primary key
+ALTER TABLE universities
+ADD CONSTRAINT university_pk PRIMARY KEY (id);
+
+// Add a SERIAL surrogate key
+-- Add the new column to the table
+ALTER TABLE professors 
+ADD COLUMN id serial;
+
+-- Make id a primary key
+ALTER TABLE professors 
+ADD CONSTRAINT professors_pkey PRIMARY KEY (id);
+
+-- Have a look at the first 10 rows of professors
+SELECT * 
+FROM professors 
+LIMIT 10;
+=> Output:
+firstname	lastname	university_shortname	id
+Karl	Aberer	EPF	1
+Reza Shokrollah	Abhari	ETH	2
+Georges	Abou Jaoudé	EPF	3
+Hugues	Abriel	UBE	4
+Daniel	Aebersold	UBE	5
+Marcelo	Aebi	ULA	6
+Christoph	Aebi	UBE	7
+Patrick	Aebischer	EPF	8
+Stephan	Aier	USG	9
+Anastasia	Ailamaki	EPF	10
+Showing 10 out of 10 rows
+
+// CONCATenate columns to a surrogate key
+-- Count the number of distinct rows with columns make, model
+SELECT COUNT(DISTINCT(make, model)) 
+FROM cars;
+
+-- Add the id column
+ALTER TABLE cars
+ADD COLUMN id varchar(128);
+
+-- Update id with make + model
+UPDATE cars
+SET id = CONCAT(make, model);
+
+-- Make id a primary key
+ALTER TABLE cars
+ADD CONSTRAINT id_pk PRIMARY KEY(id);
+
+-- Have a look at the table
+SELECT * FROM cars;
+
+// REFERENCE a table with a FOREIGN KEY
+-- Rename the university_shortname column
+ALTER TABLE professors
+RENAME COLUMN university_shortname TO university_id;
+
+-- Add a foreign key on professors referencing universities
+ALTER TABLE professors 
+ADD CONSTRAINT professors_fkey FOREIGN KEY (university_id) REFERENCES universities (id);
+
+// JOIN tables linked by a foreign key
+-- Select all professors working for universities in the city of Zurich
+SELECT professors.lastname, universities.id, universities.university_city
+FROM professors
+JOIN universities
+ON professors.university_id = universities.id
+WHERE universities.university_city = 'Zurich';
+
+// Add foreign keys to the "affiliations" table
+-- Add a professor_id column (establishes a relationship between the affiliations table and the professors table, meaning each affiliation record is now associated with a professor)
+ALTER TABLE affiliations
+ADD COLUMN professor_id integer REFERENCES professors (id);
+
+-- Rename the organization column to organization_id 
+ALTER TABLE affiliations
+RENAME organization TO organization_id;
+
+-- Add a foreign key on organization_id (Defines organization_id as a foreign key in the affiliations table refers to the id column in the organizations table)
+ALTER TABLE affiliations
+ADD CONSTRAINT affiliations_organization_fkey FOREIGN KEY (organization_id) REFERENCES organizations (id);
