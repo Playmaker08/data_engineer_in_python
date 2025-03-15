@@ -923,4 +923,14 @@ SELECT * FROM film_partitioned;
 
 Database Management System (DBMS) types: SQL DBMS (relational data models) and NoSQL DBMS (less structured and more document-centered; the key would be unique identifier and the value would be anything)
 
+*** DATA WAREHOUSE ***
+
+Dimension table provides data characteristics while fact table has metrics and references to other dimension tables
+Data warehouse architecturess:
+1) Inmon (Top-down): Decide on all data definitions, cleaning, and business rules before entering data to the warehouse
+Steps:  Select organizational process -> Identify level to store fact table -> Identify dimensions -> Identify facts
+2) Kimball (Bottom-up): Denormalize data, focus on departmental data mart, and let data moves directly from ETL to data marts
+
+Setup data warehouse design: Top-down/bottoms-up approach -> implement data on-premise (installing software and hardware) or cloud -> ETL or ELT implementation
+
 //
