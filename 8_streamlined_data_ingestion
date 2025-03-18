@@ -1,1 +1,108 @@
+// Get data from CSVs
+# Import pandas as pd
+import pandas as pd
 
+# Read the CSV and assign it to the variable data
+data = pd.read_csv("vt_tax_data_2016.csv")
+
+# View the first few lines of data
+print(data.head())
+
+// Get data from other flat files
+# Import pandas with the alias pd
+import pandas as pd
+
+# Load TSV using the sep keyword argument to set delimiter
+data = pd.read_csv("vt_tax_data_2016.tsv", sep="\t")
+
+# Plot the total number of tax returns by income group
+counts = data.groupby("agi_stub").N1.sum()
+counts.plot.bar()
+plt.show()
+
+// Import a subset of columns
+# Create list of columns to use
+cols = ["zipcode", "agi_stub", "mars1", "MARS2", "NUMDEP"]
+
+# Create dataframe from csv using only selected columns
+data = pd.read_csv("vt_tax_data_2016.csv", usecols=cols)
+
+# View counts of dependents and tax returns by income level
+print(data.groupby("agi_stub").sum())
+
+// Import a file in chunks
+# Create dataframe of next 500 rows with labeled columns
+vt_data_next500 = pd.read_csv("vt_tax_data_2016.csv", 
+                       		  nrows=500,
+                       		  skiprows=500,
+                       		  header=None,
+                       		  names=list(vt_data_first500))
+
+# View the Vermont dataframes to confirm they're different
+print(vt_data_first500.head())
+print(vt_data_next500.head())
+Note: The first 500 rows have been loaded as vt_data_first500. You'll get the next 500 rows. To do this, you'll employ several keyword arguments: nrows and skiprows to get the correct records, header to tell pandas the data does not have column names, and names to supply the missing column names. You'll also want to use the list() function to get column names from vt_data_first500 to reuse.
+
+// Specify data types
+# Load csv with no additional arguments
+data = pd.read_csv("vt_tax_data_2016.csv")
+
+# Print the data types
+print(data.dtypes)
+
+# Create dict specifying that 0s in zipcode are NA values
+null_values = {"zipcode": 0}
+
+# Load csv using na_values keyword argument
+data = pd.read_csv("vt_tax_data_2016.csv", 
+                   na_values=null_values)
+
+# View rows with NA ZIP codes
+print(data[data.zipcode.isna()])
+
+// Skip bad data
+try:
+  # (1) Import the CSV without any keyword arguments
+  data = pd.read_csv("vt_tax_data_2016_corrupt.csv")
+
+  # (2) Import CSV with error_bad_lines set to skip bad records
+  data = pd.read_csv("vt_tax_data_2016_corrupt.csv", 
+                     error_bad_lines=False)
+
+  # (3) Set warn_bad_lines to issue warnings about bad records
+  data = pd.read_csv("vt_tax_data_2016_corrupt.csv", 
+                     error_bad_lines=False, 
+                     warn_bad_lines=True)
+  
+  # View first 5 records
+  print(data.head())
+  
+except pd.errors.ParserError:
+    print("Your data contained rows that could not be parsed.")
+=> Output:
+(1): <script.py> output:
+    Your data contained rows that could not be parsed.
+(2): <script.py> output:
+       STATEFIPS STATE  zipcode  agi_stub      N1  ...  A85300  N11901  A11901  N11902  A11902
+    0         50    VT        0         1  111580  ...       0   10820    9734   88260  138337
+    1         50    VT        0         2   82760  ...       0   12820   20029   68760  151729
+    2         50    VT        0         3   46270  ...       0   10810   24499   34600   90583
+    3         50    VT        0         5   39530  ...       0   12500   67761   23320  103034
+    4         50    VT        0         6    9620  ...   20428    3900   93123    2870   39425
+    
+    [5 rows x 147 columns]
+(3): <script.py> output:
+    Skipping line 5: expected 147 fields, saw 148
+    Skipping line 9: expected 147 fields, saw 148
+    Skipping line 51: expected 147 fields, saw 148
+    
+       STATEFIPS STATE  zipcode  agi_stub      N1  ...  A85300  N11901  A11901  N11902  A11902
+    0         50    VT        0         1  111580  ...       0   10820    9734   88260  138337
+    1         50    VT        0         2   82760  ...       0   12820   20029   68760  151729
+    2         50    VT        0         3   46270  ...       0   10810   24499   34600   90583
+    3         50    VT        0         5   39530  ...       0   12500   67761   23320  103034
+    4         50    VT        0         6    9620  ...   20428    3900   93123    2870   39425
+    
+    [5 rows x 147 columns]
+
+//
