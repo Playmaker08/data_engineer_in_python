@@ -1,0 +1,81 @@
+Note: A common method to use Git is via the shell, also known as the terminal. The shell is a program for executing commands. Before we use Git, we'll run through some shell commands that will often be used in our version control workflow, such as previewing and inspecting files or directories.
+
+// Navigating the shell
+# Print the current working directory.
+pwd
+
+# Move to the data directory.
+cd data
+
+# List all files and sub-directories.
+ls
+
+// Checking the version of Git
+git --version
+
+// Converting an existing project
+Turn your current directory into a Git repo.
+git init
+
+// Creating a new repo
+# Create a new Git repo called stress-performance.
+git init stress-performance
+
+# Change into the stress-performance directory.
+cd stress-performance
+
+# Check the status of the new repo.
+git status
+
+-m : Allows a log message without opening a text editor
+
+// Adding a file to the staging area
+# Place report.md, which is in your current working directory, in the staging area.
+git add report.md
+
+// Saving files
+# Use a single command to add the two modified files to the staging area.
+git add .
+
+# Check the state of files in the repo.
+git status
+
+# Make a commit, including an appropriate flag so you can provide a log message "Add 2 participants and update to-do list." as part of the command.
+git commit -m "Add 2 participants and update to-do list."
+
+// Limiting the view of a repo's history
+View information about the last two commits only.
+git log -2
+
+// Viewing a file's history
+View information about the last two commits made for report.md only.
+git log -2 report.md
+
+// Comparing staged files
+git diff --staged mental_health_survey.csv
+
+=> Output: (Change: mental_health_survey.csv had three lines added.)
+diff --git a/data/mental_health_survey.csv b/data/mental_health_survey.csv
+index e034015..6291078 100644
+--- a/data/mental_health_survey.csv
++++ b/data/mental_health_survey.csv
+@@ -48,3 +48,5 @@ age,gender,family_history,treatment,work_interfere,benefits,mental_health_interv
+ 29,F,No,Yes,Rarely,Don't know,No,Don't know
+ 23,M,Yes,No,Sometimes,No,No,No
+ 25,M,Yes,Yes,Sometimes,Yes,No,Don't know
++23,M,Yes,No,Sometimes,No,No,No
++25,M,Yes,Yes,Sometimes,Yes,No,Don't know
+
+// Unstaging a file
+# Move into the data directory.
+cd data
+
+# Move mental_health_survey.csv out of the staging area.
+git restore --staged mental_health_survey.csv
+
+# Make a commit with the log message "Add task to fix plot in report", without opening the text editor.
+git commit -m "Add task to fix plot in report"
+
+// Reverting a commit
+# Revert mental_health_survey.csv to the state in the last commit, using an appropriate flag to avoid opening the text editor.
+git revert HEAD --no-edit
