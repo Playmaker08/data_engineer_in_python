@@ -157,3 +157,13 @@ git remote
 
 # Fetch from the remote origin repo into your local main branch.
 git fetch origin main
+
+// Pulling from a remote
+# Pull the remote origin repo's front-end branch into your current local branch.
+git pull origin front-end
+
+# Compare origin's main branch with your local branch.
+git diff origin
+
+// Pushing to a remote
+git push origin documentation
