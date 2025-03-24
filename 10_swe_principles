@@ -1,0 +1,40 @@
+3 ways that you can write modular code with Python: packages, classes, and methods.
+
+// Python modularity in the wild (utilize a class & a method from the popular package numpy.)
+# import the numpy package
+import numpy as np
+
+# create an array class object
+arr = np.array([8, 6, 7, 5, 3, 0, 9])
+
+# use the sort method
+arr.sort()
+
+# print the sorted array
+print(arr)
+
+// Leveraging documentation
+# Load the Counter function into our environment
+from collections import Counter
+
+# View the documentation for Counter.most_common
+help(Counter.most_common)
+
+# Use Counter to find the top 5 most common words
+top_5_words = Counter(words).most_common(5)
+
+# Display the top 5 most common words
+print(top_5_words)
+=> Output: <script.py> output:
+    Help on function most_common in module collections:
+    
+    most_common(self, n=None)
+        List the n most common elements and their counts from the most
+        common to the least.  If n is None, then list all element counts.
+        
+        >>> Counter('abracadabra').most_common(3)
+        [('a', 5), ('b', 2), ('r', 2)]
+    
+    [('@DataCamp', 299), ('to', 263), ('the', 251), ('in', 164), ('RT', 158)]
+
+#
