@@ -79,3 +79,81 @@ git commit -m "Add task to fix plot in report"
 // Reverting a commit
 # Revert mental_health_survey.csv to the state in the last commit, using an appropriate flag to avoid opening the text editor.
 git revert HEAD --no-edit
+
+// Creating new branches
+# Add the updated file main.py to the staging area.
+git add main.py
+
+# Make a commit with the log message "Update source code".
+git commit -m "Update source code"
+
+# In a single command, create and move to a new branch called llm-upgrade.
+git switch -c llm-upgrade
+
+// Renaming branches
+git branch -m txt fw2959-text-bug
+
+// Deleting branches
+git branch -D llm-upgrade
+
+// Comparing branches
+git diff documentation front-end
+=> Output: 
+diff --git a/index.html b/index.html
+new file mode 100644
+index 0000000..5e6562c
+--- /dev/null
++++ b/index.html
+@@ -0,0 +1,15 @@
++<html lang=en>
++<head>
++<meta charset=UTF-8>
++<title>Home</title>
++</head>
++<body>
++<h1>Welcome to the Home Page</h1>
++<h2>Courses</h2>
++<p>List of available courses.</p>
++<h2>Projects</h2>
++<p>Explore various projects.</p>
++<h2>Tracks</h2>
++<p>Different learning tracks.</p>
++</body>
++</html>
+
+// Merging two branches
+git merge ai-assistant
+
+The simplest technique for reducing the risk of conflict is to avoid having multiple versions of the same file across different branches.
+
+// The simplest technique for reducing the risk of conflict is to avoid having multiple versions of the same file across different branches.
+# Merge the documentation branch into your current branch, main.
+git merge documentation
+=> Output: Auto-merging task_list.txt
+CONFLICT (content): Merge conflict in task_list.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+# Edit task_list.txt, removing the conflict syntax and saving so it contains the content listed in the Context section; the final document should look like this:
+TODO: Add unit tests
+TODO: Increase font size on courses pages
+
+Answer: Using nano would not pass our code tests, so the solution uses the echo command instead
+echo -e "TODO: Add unit tests\nTODO: Increase font size on courses pages" > task_list.txt
+
+// Cloning a repo
+# Clone /home/repl/datacamp in your current directory.
+git clone /home/repl/datacamp
+
+// Defining and identifying remotes
+# Add the name back-up for the /home/repl/datacamp repo.
+git remote add back-up /home/repl/datacamp
+
+# List all remotes including their URL(s).
+git remote -v
+
+// Fetching from a remote
+# Run a command to find out the name(s) of remote repos linked to your project.
+git remote
+
+# Fetch from the remote origin repo into your local main branch.
+git fetch origin main
