@@ -518,4 +518,293 @@ my_tweets.plot_counts('hashtag_counts')
 # Plot the most used hashtags in the retweets
 my_tweets.retweets.plot_counts('hashtag_counts')
 
-//
+// Identifying good comments
+import re
+
+def extract_0(text):
+    # match and extract dollar amounts from the text
+    return re.findall(r'\$\d+\.\d\d', text)
+
+def extract_1(text):
+    # return all matches to regex pattern
+    return re.findall(r'\$\d+\.\d\d', text)
+
+# Print the text
+print(text)
+
+# Print the results of the function with better commenting
+print(extract_0(text))
+=> Output: <script.py> output:
+    Our competitor pricing is $10.50 an inch. Our price is $125.00 a foot.
+    ['$10.50', '$125.00']
+
+// Identifying proper docstrings
+# Run the help on all 4 functions
+help(goldilocks)
+help(rapunzel)
+help(mary)
+help(sleeping_beauty)
+
+# Execute the function with most complete docstring
+result = rapunzel()
+
+# Print the result
+print(result)
+
+// Writing docstrings
+# Complete the function's docstring
+def tokenize(text, regex=r'[a-zA-z]+'):
+  """Split text into tokens using a regular expression
+
+  :param text: text to be tokenized
+  :param regex: regular expression used to match tokens using re.findall 
+  :return: a list of resulting tokens
+
+  >>> tokenize('the rain in spain')
+  ['the', 'rain', 'in', 'spain']
+  """
+  return re.findall(regex, text, flags=re.IGNORECASE)
+
+# Print the docstring
+help(tokenize)
+
+// Using good function names
+def hypotenuse_length(leg_a, leg_b):
+    """Find the length of a right triangle's hypotenuse
+
+    :param leg_a: length of one leg of triangle
+    :param leg_b: length of other leg of triangle
+    :return: length of hypotenuse
+    
+    >>> hypotenuse_length(3, 4)
+    5
+    """
+    return math.sqrt(leg_a**2 + leg_b**2)
+
+  
+# Print the length of the hypotenuse with legs 6 & 8
+print(hypotenuse_length(6, 8))
+=> Output: <script.py> output:
+    10.0
+
+// Using good variable names
+from statistics import mean
+
+# Sample measurements of pupil diameter in mm
+pupil_diameter = [3.3, 6.8, 7.0, 5.4, 2.7]
+
+# Average pupil diameter from sample
+mean_diameter = mean(pupil_diameter)
+
+print(mean_diameter)
+
+// Refactoring for readability
+Refactoring longer functions into smaller units can help with both readability and modularity. In this exercise, you will refactor a function into smaller units. The function you will be refactoring is shown below. Note, in the exercise, you won't be using docstrings for the sake of space; in a real application, you should include documentation!
+
+def polygon_area(n_sides, side_len):
+    """Find the area of a regular polygon
+
+    :param n_sides: number of sides
+    :param side_len: length of polygon sides
+    :return: area of polygon
+
+    >>> round(polygon_area(4, 5))
+    25
+    """
+    perimeter = n_sides * side_len
+
+    apothem_denominator = 2 * math.tan(math.pi / n_sides)
+    apothem = side_len / apothem_denominator
+
+    return perimeter * apothem / 2
+
+* Solution:
+def polygon_perimeter(n_sides, side_len):
+    return n_sides * side_len
+
+def polygon_apothem(n_sides, side_len):
+    denominator = 2 * math.tan(math.pi / n_sides)
+    return side_len / denominator
+
+def polygon_area(n_sides, side_len):
+    perimeter = polygon_perimeter(n_sides, side_len)
+    apothem = polygon_apothem(n_sides, side_len)
+
+    return perimeter * apothem / 2
+
+# Print the area of a hexagon with legs of size 10
+print(polygon_area(n_sides=6, side_len=10))
+
+Testing: Confirm code is working as intended, ensure changes in one function do not break another, and protect against changes in a dependency
+Easy to use options: doctest, pytest
+
+// Using doctest
+def sum_counters(counters):
+    """Aggregate collections.Counter objects by summing counts
+
+    :param counters: list/tuple of counters to sum
+    :return: aggregated counters with counts summed
+
+    >>> d1 = text_analyzer.Document('1 2 fizz 4 buzz fizz 7 8')
+    >>> d2 = text_analyzer.Document('fizz buzz 11 fizz 13 14')
+    >>> sum_counters([d1.word_counts, d2.word_counts])
+    Counter({'fizz': 4, 'buzz': 2})
+    """
+    return sum(counters, Counter())
+
+doctest.testmod()
+
+// Using pytest
+from collections import Counter
+from text_analyzer import SocialMedia
+
+# Create an instance of SocialMedia for testing
+test_post = 'learning #python & #rstats is awesome! thanks @datacamp!'
+sm_post = SocialMedia(test_post)
+
+# Test hashtag counts are created properly
+def test_social_media_hashtags():
+    expected_hashtag_counts = Counter({'#python': 1, '#rstats': 1})
+    assert sm_post.hashtag_counts == expected_hashtag_counts
+
+// Documenting classes for Sphinx
+from text_analyzer import Document
+
+class SocialMedia(Document):
+    """Analyze text data from social media
+    
+    :param text: social media text to analyze
+
+    :ivar hashtag_counts: Counter object containing counts of hashtags used in text
+    :ivar mention_counts: Counter object containing counts of @mentions used in text
+    """
+    def __init__(self, text):
+        Document.__init__(self, text)
+        self.hashtag_counts = self._count_hashtags()
+        self.mention_counts = self._count_mentions()
+
+*** FINAL PROJECT ***
+PROMPT: You will be reviewing their code to ensure it's ready to ship to production.
+
+The first chunk of code that you'll be reviewing is your colleague's function to prepare smartphone data from a CSV file for visualization. After ingesting and cleaning the smartphone data, your colleague has prepared a function to plot a variable passed to the function, versus "price". However, within this function, there is code that does not adhere to DRY principles and is copied and pasted. Make sure to refactor the code appropriately, using the column_to_label() function defined below.
+
+Wow, your colleague even included a unit test to ensure NaN values were removed from the cleaned DataFrame! However, it doesn't seem like the unit test is passing when executed. Re-work this unit test to ensure that it matches the transformation logic in the prepare_smartphone_data() function.
+
+Once you've made changes to the test_nan_values unit test, you'll want to ensure that these unit tests execute with ExitCode.OK. This means that the pytest defined above has passed testing, and the code is one step closer to being to be shipped to production.
+
+For context, there is a print statement in the prepare_smartphone_data() function in the first cell of the notebook below that can be used to visualize the dataset your Junior Data Engineer has been working with. Feel free to update this line of code as needed. This can then be removed after the dataset has been investigated. Best of luck!
+
+Solution:
+[1]:
+import os
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+def prepare_smartphone_data(file_path):
+    """
+    To prepare the smartphone data for visualization, a number of transformations 
+    will be applied after reading in the raw DataFrame to memory, including:
+        - reducing the number of columns to only those needed for later analysis
+        - removing records without a battery_capacity value
+        - divide the price column by 100 to find the dollar amount
+    
+    :param file_path: the file path where the raw smartphone data is stored
+    :return: a cleaned dataset having had the operations above applied to it
+    """
+    
+    # Check if file exists before proceeding
+    if os.path.exists(file_path):
+        raw_data = pd.read_csv(file_path)
+        # Update 1: Variable name 'raw Data' changed to 'raw_data' for Python snake_case naming convention.
+    else:
+        raise Exception(f"File not found at {file_path}")
+
+    # Keep only necessary columns for analysis
+    feature_set = [
+        "brand_name",
+        "os",
+        "price",
+        "avg_rating",
+        "processor_speed",
+        "battery_capacity",
+        "screen_size"
+    ]
+    # Update 2: Renamed 'columns_to_keep_in_clean data' to 'feature_set' for clarity and succinctness.
+    clean_data = raw_data.loc[:, feature_set]
+    
+    # Remove entries without 'battery_capacity' or 'os'
+    clean_data = clean_data.dropna(subset=["battery_capacity", "os"])
+    # Update 3: Adjusted spacing in 'dropna' function call to improve readability.
+    
+    # Convert 'price' column to reflect dollar amounts
+    clean_data["price"] = clean_data["price"] / 100
+    # Update 4: Added spaces around '/' operator for better code readability.
+    
+    return clean_data
+
+# Prepare the data
+cleaned_data = prepare_smartphone_data("./data/smartphones.csv")
+
+[2]:
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+def column_to_label(column_name):
+    """
+    Converts a column name in a pandas DataFrame to a string that can be
+    used as a label in a plot.
+    
+    :param column_name: string containing original column name
+    :return: string that is ready to be presented on a plot
+    """
+    
+    if isinstance(column_name, str):
+        return " ".join(column_name.split("_")).title()
+        # Update 5: Encapsulated logic into 'column_to_label' function to promote DRY principle.
+    else:
+        raise Exception("Column name must be a string.")
+
+def visualize_versus_price(clean_data, x):
+    """
+    Use seaborn and matplotlib to identify a pattern between price and 
+    processor_speed.
+    
+    :param clean_data: a pandas DataFrame containing cleaned smartphone data
+    :param x: variable to be plotted on the x-axis
+    :return: None
+    """
+    
+    x_title = column_to_label(x)
+    # Update 6: Used 'column_to_label' function to remove duplicated code.
+    
+    sns.scatterplot(x=x, y="price", data=clean_data, hue="os")
+    plt.xlabel(x_title)
+    plt.ylabel("Price ($)")
+    plt.title(f"{x_title} vs. Price")
+
+# Visualize the data
+visualize_versus_price(cleaned_data, "processor_speed")
+
+[3]:
+# Testing setup
+import pytest
+import ipytest
+
+ipytest.config.rewrite_asserts = True
+__file__ = "notebook.ipynb"
+
+@pytest.fixture()
+def clean_smartphone_data():
+    return prepare_smartphone_data("./data/smartphones.csv")
+    
+def test_nan_values(clean_smartphone_data):
+    """
+    Ensures no NaN values in critical columns.
+    """
+    
+    assert clean_smartphone_data["battery_capacity"].isnull().sum() == 0
+    assert clean_smartphone_data["os"].isnull().sum() == 0
+    # Update 7: Corrected logical error by ensuring correct assertion syntax for checking NaN values.
+    
+ipytest.run("-qq")
