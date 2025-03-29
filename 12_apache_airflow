@@ -1,4 +1,31 @@
 Airflow: A platform to program workflows, including creation, scheduling, and monitoring of said workflows (DAGs - Directed Acyclic Graph). 
 It can implement in any languages, but the workflow is written in Python.
 
+// Defining a simple DAG
+# Import the DAG object
+from airflow import DAG
+
+# Define the default_args dictionary
+default_args = {
+  'owner': 'dsmith',
+  'start_date': datetime(2023, 1, 14),
+  'retries': 2
+}
+
+# Instantiate the DAG object
+with DAG('example_etl', default_args=default_args) as etl_dag:
+  pass
+
+// Defining a BashOperator task
+# Import the BashOperator
+from airflow.operators.bash import BashOperator
+
+with DAG(dag_id="test_dag", default_args={"start_date": "2024-01-01"}) as analytics_dag:
+  # Define the BashOperator 
+  cleanup = BashOperator(
+      task_id='cleanup_task',
+      # Define the bash_command
+      bash_command='cleanup.sh',
+  )
+
 //
